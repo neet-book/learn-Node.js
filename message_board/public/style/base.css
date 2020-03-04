@@ -13,18 +13,15 @@ header {
 
 .submit-btn {
 	color: rgb(241, 241, 241);
-	display: inline-block;
 	border-radius: 5px;
 	padding: 3px 12px;
 	background-color: rgb(86, 198, 55);
-
 	cursor: pointer;
-}
-.message-form{
-	display: flex;
 
-	padding: 10px 0;
+	display: inline-block;
+	margin-top: 20px;
 }
+
 #msg-input {
 	flex: 1;
 	border: none;
@@ -45,8 +42,27 @@ header {
 	list-style: none;
 	height: 30px;
 	line-height: 30px;
-	text-indent: 1em;
 	border-bottom: 1px #d4d4d473 solid;
+
+	display: flex;
+}
+
+.msg-date {
+	width: 70px
+}
+
+.msg-author, .msg-date {
+	font-size: 12px;
+	color: #696969
+}
+
+.msg-author {
+	width: 100px;
+}
+
+.msg-content {
+	flex: 1;
+	text-indent: 1em;
 }
 
 .message-list .message-item:last-child {
@@ -74,4 +90,51 @@ header {
 
 .showTip {
 	top: 10%;
+}
+
+.form-container {
+	min-width: 300px;
+	max-width: 650px;
+	width: 70%;
+
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.msg-form {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.msg-content, .msg-author {
+	width: 100%;
+	border: none;
+	outline: none;
+	padding: 3px;
+	margin-right: 5px;
+	border-bottom: 1px solid #646464;
+}
+
+.msg-author {
+	list-style: none;
+	height: 30px;
+	line-height: 30px;
+	border: 1px #b8b8b873 solid;
+	border-radius: 5px;
+	margin-bottom: 30px;
+	padding: 0 5px;
+}
+
+.msg-content {
+	border: 1px #b8b8b873 solid;
+	border-radius: 5px;
+	height: 200px;
+	resize: none;
+}
+.msg-btn {
+	width: 100%;
+	text-align: right;
+	padding: 10px 30px;
 }

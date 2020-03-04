@@ -1,26 +1,36 @@
-// 获取元素
-// 发布按钮
-const submitBtn = document.getElementsByClassName('submit-btn')[0];
-// 输入框
-const messageIpt = document.getElementById('msg-input');
-// 留言列表
+// 获取留言列表
 const messageList = document.getElementsByClassName('message-ul')[0];
+window.onload = function () {
+  // 获取信息列表
+  const list = []
+  
+  getMessageList('/msg')
+    .then(re => {
+      console.log(re)
+    })
+}
 
-// 添加留言项
-function addMessage(msg) {
-  const li = document.createElement('li');
-  li.classList.toggle('message-item');
-  li.innerText = msg
+// 封装请求数据方法
+function getMessageList() {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest ();
+    request.open('GET', '/msg', true)
+    request.send(null)
 
-  messageList.insertBefore(li, messageList.firstChild);
+    request.onreadystatechange = function() {
+      if (request.readyState === 4) {
+        if (request.status === 200) {
+          resolve(request.responseText)
+        } else {
+          reject(request.status)
+        }
+      }
+    }
+  })
 }
 
 // 定义显示提示函数
 const showTip = (function() {
-  // 检查是否已经创建过tip
-  const tips = document.getElementsByClassName('tip')
-  if (tips.length > 0) throw new Error('不可重复创建Tip')
-
   // 创建提示载体元素
   const tip = document.createElement('div');
   tip.classList.toggle('tip');
@@ -42,10 +52,16 @@ const showTip = (function() {
   }
 })();
 
-// 添加提交按钮响应事件
-submitBtn.addEventListener('click', () => {
-  let msg = messageIpt.value.trim();
-  if (msg === "") return showTip('输入内容不能为空')
-  addMessage(msg);
-  messageIpt.value = ""
-})
+// 添加留言项
+function addMessage(msg) {
+  const li = document.getElementsByClassName('message-item')[0];
+  const clone = li.cloneNode(true)
+  const content = li.children[0]
+  const date = li.children[1]
+  
+  content.innerText = msg.content
+  data.innerText = msg.data
+  author.innerText = msg.author
+
+  messageList.insertBefore(li, messageList.firstChild);
+}

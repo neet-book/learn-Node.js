@@ -8,16 +8,26 @@
 <body>
 	<header>
 		<h1 class="head-title">留言板</h1>
-		<article class="message-form">
-				<input type="text" id="msg-input" placeholde="留言内容">
+				<!-- 跳转至发布留言表达页面 -->
 				<div class="submit-btn">发布留言</div>
-		</article>
 	</header>
 	<mian>
 		<div class="list-container">
 			<article class="message-list">
 				<ul class="message-ul">
-					<li class="message-item">5</li>
+					{{ each list }}
+					<li class="message-item">
+						<span class="msg-content">
+							{{ $value.content}}
+						</span>
+						<span class="msg-author">
+							author: {{ $value.author }}
+						</span>
+						<span class="msg-date">
+							{{ $value.date }}
+						</span>
+					</li>
+					{{ /each }}
 				</ul>
 			</article>
 		</div>

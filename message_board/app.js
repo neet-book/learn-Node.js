@@ -1,5 +1,6 @@
 const http = require('http')
 const fs = require('fs')
+const template = require('art-template')
 
 // 封装读取文件读取
 const readFile = url => {
@@ -28,6 +29,13 @@ const contentType = url => {
       return false
   }
 }
+
+// 解析时间戳
+const parseDate = function (time) {
+  const date = new Date(time)
+  return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate()
+}
+
 // 创建Http应用
 const options = { host: 'localhost' }
 http.createServer(options, function (request, response) {
@@ -37,10 +45,25 @@ http.createServer(options, function (request, response) {
   // 请求页面
   if (url === '/') {
     readFile('./view/index.html')
-      .then(re => {
-        // 成功读取到html文件
-        response.writeHead(200, { 'Content-Type': 'text/html'})
-        response.end(re.toString())
+      .then(tem => {
+        // 成功读取到html模板文件
+        
+        // 获取留言列表
+        readFile('./message/msg.json')
+          .then(re => {
+            let list = JSON.parse(re.toString())
+            console.log(list)
+            // 解析时间戳
+            list.forEach((item, index, arr) => {
+              arr[index].date = parseDate(arr[index].date)
+            })
+
+            // 渲染模板
+            const page = template.render(tem.toString(), { list })
+            response.writeHead(200, { 'Content-Type': 'text/html'})
+            response.end(page)
+          })
+        
       })
       .catch(err => {
         console.log('请求页面: ', err)
@@ -76,6 +99,16 @@ http.createServer(options, function (request, response) {
     return
   }
 
+  // 请求留言列表
+  if (/^\/msg/i.test(url)) {
+    readFile('./message/msg.json')
+      .then(re => {
+        response.writeHead(200, { 'Content-Type': 'text/plain'})
+        response.end(re.toString())
+      })
+
+    return
+  }
   response.writeHead(404, { 'Content-Type': 'text/html'})
   response.end()
 }).listen(8080)
