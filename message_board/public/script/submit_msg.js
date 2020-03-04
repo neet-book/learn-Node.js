@@ -2,7 +2,7 @@
 // 发布按钮
 const submitBtn = document.getElementsByClassName('submit-btn')[0];
 // 留言列表
-const messageList = document.getElementsByClassName('message-ul')[0];
+const form = document.forms[0]
 
 
 
@@ -33,10 +33,18 @@ const showTip = (function() {
   }
 })();
 
-// // 添加提交按钮响应事件
-// submitBtn.addEventListener('click', () => {
-//   let msg = messageIpt.value.trim();
-//   if (msg === "") return showTip('输入内容不能为空')
-//   addMessage(msg);
-//   messageIpt.value = ""
-// })
+// 添加提交按钮响应事件
+submitBtn.addEventListener('click', () => {
+  const msg = serializeForm(form)
+  console.log(msg)
+})
+
+// 序列化Form
+function serializeForm(form) {
+  const data = {}
+  Array.from(form).forEach((item, index, form) => {
+    data[item.name] = item.value
+  })
+
+  return data
+}
