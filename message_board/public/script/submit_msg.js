@@ -1,9 +1,8 @@
 // 获取元素
 // 发布按钮
-const submitBtn = document.getElementsByClassName('submit-btn')[0];
+const submitBtn = document.querySelector('.submit-btn');
 // 留言列表
 const form = document.forms[0]
-
 
 
 // 定义显示提示函数
@@ -36,15 +35,40 @@ const showTip = (function() {
 // 添加提交按钮响应事件
 submitBtn.addEventListener('click', () => {
   const msg = serializeForm(form)
-  console.log(msg)
+
+  submitMessage(msg).then(re => {
+    showTip(re)
+    // 重置表单
+    form.reset()
+  })
+  .catch(e => {
+    showTip(e)
+  })
 })
 
 // 序列化Form
 function serializeForm(form) {
   const data = {}
-  Array.from(form).forEach((item, index, form) => {
+  Array.from(form).forEach(item => {
     data[item.name] = item.value
   })
 
   return data
+}
+
+// 提交留言
+function submitMessage(msg) {
+  
+  return new Promise((resolve, reject) => {
+    fetch('/submit', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      params: msg
+    })
+  }).then(response => {
+    console.log(response)
+    resolve()
+  })
 }

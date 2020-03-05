@@ -3,10 +3,11 @@ const messageList = document.getElementsByClassName('message-ul')[0];
 window.onload = function () {
   // 获取信息列表
   const list = []
-  
-  getMessageList('/msg')
-    .then(re => {
-      console.log(re)
+  this.fetch('/msg')
+    .then(response => {
+      if (response.status === 200) return response.json()
+    }).then( data => {
+      console.log(data)
     })
 }
 
@@ -65,3 +66,10 @@ function addMessage(msg) {
 
   messageList.insertBefore(li, messageList.firstChild);
 }
+
+// 获取按钮
+const toForm = document.querySelector('.to-form')
+
+toForm.addEventListener('click', function () {
+  location.href = '/submit'
+})
