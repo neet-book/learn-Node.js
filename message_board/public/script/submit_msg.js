@@ -5,7 +5,6 @@ const submitBtn = document.getElementsByClassName('submit-btn')[0];
 const form = document.forms[0]
 
 
-
 // 定义显示提示函数
 const showTip = (function() {
   // 检查是否已经创建过tip
@@ -36,15 +35,39 @@ const showTip = (function() {
 // 添加提交按钮响应事件
 submitBtn.addEventListener('click', () => {
   const msg = serializeForm(form)
-  console.log(msg)
+  if (msg.author === "") return showTip('名称不能为空')
+  if (msg.content === "") return showTip('留言内容不能为空')
+
+  msg.date = new Date().getTime()
+  let msgStr = JSON.stringify(msg)
+  submitMessage(msgStr).then(re => {
+    console.log(re)
+    if (re.status === 200) {
+      shwoTip('发布成功')
+      window.setTimeout(() => {
+        window.location.href = '/'
+      }, 1000)
+    }
+  })
 })
 
 // 序列化Form
 function serializeForm(form) {
   const data = {}
   Array.from(form).forEach((item, index, form) => {
-    data[item.name] = item.value
+    data[item.name] = item.value.trim()
   })
 
   return data
+}
+
+// 提交留言
+function submitMessage(msg) {
+  let msgStr = JSON.stringify(msg)
+  // 发送数据
+  return new Promise((resolve, reject) => {
+    const http = new XMLHttpRequest()
+    http.open('POST', '/submit', true)
+    http.send(msg)
+  })
 }
