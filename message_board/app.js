@@ -132,7 +132,6 @@ http.createServer(options, function (request, response) {
       })
       // 留言接受完毕
       request.on('end', () => {
-        console.log(postData)
         let newMsg = JSON.parse(postData)
   
         // 获取所有保存的留言
@@ -145,12 +144,13 @@ http.createServer(options, function (request, response) {
           // 保存
           fs.writeFile('./message/msg.json', msgsStr, function (e) {
             // 返回结果
-            if (!e) {
-              response.writeHead(200, { 'Content-Type': 'text/plain'})
-              response.end('ok')
+            if (e) {
+              console.log('写入失败', e)
+              response.writeHead(500)
+              resopnse.end()
             } else {
-              response.writeHead(500, { 'Content-Type': 'text/plain'})
-              response.end('error')
+              response.writeHead(301, { 'Location': '/'})
+              response.end('ok')
             }
           })
         })

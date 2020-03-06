@@ -40,15 +40,11 @@ submitBtn.addEventListener('click', () => {
 
   msg.date = new Date().getTime()
   let msgStr = JSON.stringify(msg)
-  submitMessage(msgStr).then(re => {
-    console.log(re)
-    if (re.status === 200) {
-      shwoTip('发布成功')
-      window.setTimeout(() => {
-        window.location.href = '/'
-      }, 1000)
-    }
-  })
+  submitMessage(msgStr)
+  showTip('发布成功')
+  window.setTimeout(() => {
+    window.location.href = '/'
+  }, 1000)
 })
 
 // 序列化Form

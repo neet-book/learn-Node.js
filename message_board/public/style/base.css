@@ -108,7 +108,7 @@ header {
 	flex-wrap: wrap;
 }
 
-.msg-content, .msg-author {
+.msg-form-content, .msg-form-author {
 	width: 100%;
 	border: none;
 	outline: none;
@@ -117,7 +117,7 @@ header {
 	border-bottom: 1px solid #646464;
 }
 
-.msg-author {
+.msg-form-author {
 	list-style: none;
 	height: 30px;
 	line-height: 30px;
@@ -127,13 +127,13 @@ header {
 	padding: 0 5px;
 }
 
-.msg-content {
+.msg-form-content {
 	border: 1px #b8b8b873 solid;
 	border-radius: 5px;
 	height: 200px;
 	resize: none;
 }
-.msg-btn {
+.msg-form-btn {
 	width: 100%;
 	text-align: right;
 	padding: 10px 30px;
