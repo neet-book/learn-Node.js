@@ -52,7 +52,6 @@ http.createServer(options, function (request, response) {
         readFile('./message/msg.json')
           .then(re => {
             let list = JSON.parse(re.toString())
-            console.log(list)
             // 解析时间戳
             list.forEach((item, index, arr) => {
               arr[index].date = parseDate(arr[index].date)
@@ -85,13 +84,11 @@ http.createServer(options, function (request, response) {
     readFile('.' + url)
       .then(re => {
         //  读取成功
-        console.log('文件读取成功', url)
         response.writeHead(200, { 'Content-Type': type })
         response.end(re.toString())
       })
       .catch(err => {
         // 读取失败
-        console.log('文件读取失败', url)
         response.writeHead(404, { 'Content-Type': 'text/plain' })
         response.end('Requested file not found')
       })
@@ -159,6 +156,23 @@ http.createServer(options, function (request, response) {
       return
     }
   }
+
+  // 提交留言相关
+  if (/^\/submit/.test(url)) {
+    console.log(urlT.parse(url))
+    if (url === '/submit') {
+      console.log('sum')
+      readFile('./view/submit.html')
+        .then(re => {
+          response.writeHead(200, { 'Content-Type': 'text/html'})
+          response.end(re.toString())
+        }).catch(e => {
+          console.log('获取submit页面: ', e)
+        })
+    }
+    return
+  }
+
   response.writeHead(404, { 'Content-Type': 'text/html'})
   response.end()
 }).listen(8080)

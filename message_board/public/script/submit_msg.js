@@ -1,6 +1,6 @@
 // 获取元素
 // 发布按钮
-const submitBtn = document.getElementsByClassName('submit-btn')[0];
+const submitBtn = document.querySelector('.submit-btn');
 // 留言列表
 const form = document.forms[0]
 
