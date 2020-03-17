@@ -37,6 +37,21 @@ router.get('/', async  (ctx) => {
   await ctx.render('index', { module: 'ejs' })
 })
 
+router.get('/test', ctx => {
+  if(ctx.cookies.get('userName') === undefined) {
+    // 将中文装换二进制数据，然后装换为base64字符串
+    let cookies = (Buffer.form('中文')).toString('base64')
+    console.log(cookies)
+    ctx.cookies.set('userName', cookies)
+  } else {
+    let cookies = ctx.cookies.get('userName')
+    // 将其还原
+    console.log(cookies)
+    let userName = Buffer.from(cookies, 'base64').toString()
+    console.log(userName)
+  }
+})
+
 // 注册路由
 app.use(router.routes())
 app.use(router.allowedMethods())
