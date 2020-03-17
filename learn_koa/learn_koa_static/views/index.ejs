@@ -11,10 +11,12 @@
     这是一个<%= module %>模板
   </p>
   <div class="login-container">
-    <form id="user-log-form">
-      <label for="user-name">User Name:</label><input type="text" id="user-name" name="user-name"><br>
-      <label for="password">Password:</label><input type="password" id="password" name="password"><br>
-      <button id="loging-btn">Login</button>
+    <form id="user-log-form" action="/login" method="POST">
+      <label for="user-name">User Name:</label><br>
+      <input type="text" id="user-name" name="user-name" maxlength="10"><br>
+      <label for="password">Password:</label><br>
+      <input type="password" id="password" name="password" maxlength="15" size="7"><br>
+      <button id="loging-btn" type="submit">Login</button>
     </form>
   </div>
   <p class="date">
