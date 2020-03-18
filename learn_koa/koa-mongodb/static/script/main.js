@@ -3,6 +3,9 @@ const submit = document.getElementById('loging-btn')
 
 submit.addEventListener('click', async (event) => {
   event.preventDefault()
+  window.setTimeout(() => {
+    console.log(document.cookie.get('userName'))
+  })
   const re =  await fetch('/login', {
     method: 'post',
     body: JSON.stringify(serialize(loginForm)),
