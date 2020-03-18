@@ -1,6 +1,6 @@
 // 原生
 const path = require('path')
-
+console.time('start')
 // koa
 const Koa = require('koa')
 const serve = require('koa-static')
@@ -11,8 +11,27 @@ const session = require('koa-session')
 // 路由
 const router = require('./router/index')
 
+// 自定义模块
+const Mongo = require('./common/mongDB/mongo-util.js')
+
 // 创建实例
 const app = new Koa()
+
+// 数据库
+app.use(async (ctx, next) => {
+  console.log('ex')
+  try {
+  Mongo.connect({
+      user: 'koa',
+      pwd: '123456',
+      host: 'localhost',
+      prot: 27017
+    })
+  } catch (e) {
+    console.log(e)
+  }
+  next()
+})
 
 // 注册views
 app.use(views(path.resolve(__dirname, 'views'), { extension: 'ejs' }))
@@ -41,7 +60,9 @@ app.use(session(config, app))
 app.use(router.routes())
 app.use(router.allowedMethods())
 
+
 // 启动应用
 app.listen(3000, () => {
   console.log('Server is runing at http://localhost:3000')
 })
+console.timeEnd('start')
