@@ -4,7 +4,7 @@ const submit = document.getElementById('loging-btn')
 submit.addEventListener('click', async (event) => {
   event.preventDefault()
   window.setTimeout(() => {
-    console.log(document.cookie.get('userName'))
+    console.log(document.cookie)
   })
   const re =  await fetch('/login', {
     method: 'post',

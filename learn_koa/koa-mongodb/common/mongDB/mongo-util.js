@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
+const assert = require('assert');
 
 class MongoUtil {
   constructor(url, dbName) {
@@ -25,17 +26,25 @@ class MongoUtil {
       url = `mongodb://{config.host}:${config.port ? config.port : 27017}`
     }
     console.log(url)
+      // 创建url
+      let user = encodeURIComponent('test')
+      let pwd = encodeURIComponent('12345')
+      // let user = encodeURIComponent('root')
+      // let pwd = encodeURIComponent('12345')
+      let databasename = encodeURIComponent('test')
+      let url = `mongodb://${user}:${pwd}@localhost:27017/${databasename}?authMechanism=DEFAULT`
+
     // 链接数据库
     try {
-      this.clint =  await new Promise((res, rej) => {
-        MongoClient.connect(url, (err, clint) => {
+      const db =  await new Promise((res, rej) => {
+        MongoClient.connect(url, (err, db) => {
           if (err) return rej(err)
-          console.log('"Connected correctly to server"')
-          res(clint)
+          console.log("Connected correctly to server")
+          res(db)
         })
       })
     } catch (err) {
-      console.log(err)
+      assert.equal(null, err);
     }
   }
 }

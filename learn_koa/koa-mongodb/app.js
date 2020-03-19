@@ -12,18 +12,17 @@ const session = require('koa-session')
 const router = require('./router/index')
 
 // 自定义模块
-const Mongo = require('./common/mongDB/mongo-util.js')
+
 
 // 创建实例
 const app = new Koa()
 
 // 数据库
 app.use(async (ctx, next) => {
-  console.log('ex')
   try {
   Mongo.connect({
-      user: 'koa',
-      pwd: '123456',
+      user: 'root',
+      pwd: '12345',
       host: 'localhost',
       prot: 27017
     })
