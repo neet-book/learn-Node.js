@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
+const assert = require('assert');
 
 class MongoUtil {
   constructor(url, dbName) {
@@ -11,31 +12,25 @@ class MongoUtil {
       throw Error('host is undefined')
     }
 
-    // 创建url
-    let url = ''
-    if (config.user !== undefined) {
-      if (config.pwd || config === 0) {
-        let user = encodeURIComponent(config.user)
-        let pwd = encodeURIComponent(config.pwd)
-        url = `mongodb://${user}:${pwd}@${config.host}:${config.port ? config.port : 27017}?authMechanism=DEFAULT`
-      } else {
-        throw new Error('密码不合法') 
-      }
-    } else {
-      url = `mongodb://{config.host}:${config.port ? config.port : 27017}`
-    }
-    console.log(url)
+      // 创建url
+      let user = encodeURIComponent('test')
+      let pwd = encodeURIComponent('12345')
+      // let user = encodeURIComponent('root')
+      // let pwd = encodeURIComponent('12345')
+      let databasename = encodeURIComponent('test')
+      let url = `mongodb://${user}:${pwd}@localhost:27017/${databasename}?authMechanism=DEFAULT`
+
     // 链接数据库
     try {
-      this.clint =  await new Promise((res, rej) => {
+      clint =  await new Promise((res, rej) => {
         MongoClient.connect(url, (err, clint) => {
           if (err) return rej(err)
-          console.log('"Connected correctly to server"')
+          console.log("Connected correctly to server")
           res(clint)
         })
       })
     } catch (err) {
-      console.log(err)
+      assert.equal(null, err);
     }
   }
 }

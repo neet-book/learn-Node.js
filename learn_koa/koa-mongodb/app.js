@@ -19,11 +19,10 @@ const app = new Koa()
 
 // 数据库
 app.use(async (ctx, next) => {
-  console.log('ex')
   try {
   Mongo.connect({
-      user: 'koa',
-      pwd: '123456',
+      user: 'root',
+      pwd: '12345',
       host: 'localhost',
       prot: 27017
     })
