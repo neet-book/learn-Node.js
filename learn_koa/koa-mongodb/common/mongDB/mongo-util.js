@@ -15,9 +15,9 @@ class MongoUtil {
     let url = ''
     if (config.user !== undefined) {
       if (config.pwd || config === 0) {
-        let user = encodeURIComponent(config.user)
-        let pwd = encodeURIComponent(config.pwd)
-        url = `mongodb://${user}:${pwd}@${config.host}:${config.port ? config.port : 27017}?authMechanism=DEFAULT`
+        let user = config.user
+        let pwd = config.pwd
+        url = `mongodb://${user}:${pwd}@${config.host}:${config.port ? config.port : 27017}/?authMechanism=DEFAULT`
       } else {
         throw new Error('密码不合法') 
       }
