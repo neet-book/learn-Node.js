@@ -5,7 +5,10 @@ const assert = require('assert')
 
 class Database {
   constructor() {
-    this.database = Database.connect()
+    // 连接数据库
+    if (!Database.database) {
+      Database.database = Database.connect()
+    }
   }
 
   // 链接数据库
@@ -33,15 +36,14 @@ class Database {
           this.reconnect(++count)
         }, 2000)
       }
-      this.database = db
+      Database.database = db
       return db
     })
   }
 
   // 查找数据
   async find(colle, query, ) {
-
-    const db = await this.database
+    const db = await Database.database
     // 检查是否连接成功
     if (!db) db = await this.reconnect()
     // 查询
@@ -52,12 +54,35 @@ class Database {
       })
     })
   }
-}
-console.log(config.url)
-const db = new Database
 
-db.find('module', {}).then(re => {
+  async insert(colle, docs) {
+    const db = await Database.database
+    // 检查是否连接成功
+    if (!db) db = await this.reconnect()
+    // 检查类型插入当个或多个文档
+    let method = 'insertOne'
+    if (Array.isArray(docs)) method = insertMany
+    return new Promise((res, rej) => {
+      db.collection(colle)[method](docs, (err, result) => {
+        if (err) rej(err)
+        res(result)
+      })
+    })
+  }
+}
+
+module.exports = Database
+console.log(config.url)
+const db1 = new Database
+
+db1.find('module', {}).then(re => {
   console.log(re)
 })
 
 
+db1.insert('module', {
+  name: 'router',
+  module: 'koa-router'
+}).then(re => {
+  console.log(re.raw.toString())
+})
