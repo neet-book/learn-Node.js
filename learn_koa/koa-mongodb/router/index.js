@@ -1,21 +1,31 @@
 const Router = require('koa-router')
 const router = new Router()
-
+// 数据库
+// 数据库
+const Database = require('../module/mongodb/database')
+const user = new Database('user')
 // 配置路由
 // 首页
-router.get('/', async (ctx, next) => {
+router.get('/', async (ctx) => {
+  let list = await user.find({})
   await ctx.render('index', {
     module: 'ejs',
-    date: new Date().toLocaleDateString()
+    date: new Date().toLocaleDateString(),
+    list: list
   })
 })
 
-// 登录
-router.post('/login', async (ctx) => {
-  console.log(ctx.request.body)
-  ctx.cookies.set('userName', ctx.request.body.userName)
-  let body =JSON.stringify({ contet: '成功' })
-  ctx.body = body
+router.post('/add', async ctx => {
+  console.time('add')
+  const reuslt =   await user.insert(ctx.request.body)
+  if (require.n === 0 && reuslt.ok !== 1) {
+    ctx.state = 501
+    return
+  }
+  ctx.state = 200
+  let docs = await user.find(ctx.request.body)
+  ctx.body = docs
+  console.timeEnd('add')
 })
 
 // session

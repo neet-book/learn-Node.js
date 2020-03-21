@@ -6,22 +6,23 @@
   <title>Hello Koa</title>
 </head>
 <body>
-  <p class="head-title">
-    <%- include('title') %>
-    这是一个<%= module %>模板
-  </p>
+
+  <div class="list-container">
+    <ul id="user-list">
+      <% for(let item of list) { %>
+      <li><%= item.user %> <%= item.pwd %>  <button class="delete-btn">delete</button></li>
+      <% } %> 
+    </ul>
+  </div>
   <div class="login-container">
     <form id="user-log-form" >
       <label for="user-name">User Name:</label><br>
-      <input type="text" id="user-name" name="user-name" maxlength="10"><br>
+      <input type="text" id="user-name" name="user" maxlength="10"><br>
       <label for="password">Password:</label><br>
-      <input type="password" id="password" name="password" maxlength="15" size="7"><br>
-      <button id="loging-btn" type="button">Login</button>
+      <input type="password" id="password" name="pwd" maxlength="15" size="7"><br>
+      <button id="loging-btn" type="button">Sign up</button>
     </form>
   </div>
-  <p class="date">
-    <%= date %>
-  </p>
   <script src="script/main.js"></script>
 </body>
 </html>

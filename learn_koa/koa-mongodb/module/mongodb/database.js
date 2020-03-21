@@ -4,7 +4,9 @@ const config = require('./config')
 const assert = require('assert')
 
 class Database {
-  constructor() {
+  constructor(coll) {
+    // 操作的集合
+    this.coll = coll
     // 连接数据库
     if (!Database.database) {
       Database.database = Database.connect()
@@ -41,30 +43,72 @@ class Database {
     })
   }
 
+  // 关闭数据库链接
+  static close() {
+    setTimeout(() => {
+      Database.database.close()
+    }, 0)
+  }
+
   // 查找数据
-  async find(colle, query, ) {
+  async find(query) {
     const db = await Database.database
     // 检查是否连接成功
     if (!db) db = await this.reconnect()
     // 查询
     return await new Promise((res, rej) => {
-      db.collection(colle).find(query).toArray((err, docs) => {
+      db.collection(this.coll).find(query).toArray((err, docs) => {
         if (err) return rej(err)
         res(docs)
       })
     })
   }
-
-  async insert(colle, docs) {
+  // 添加
+  async insert(docs) {
+    let method = 'insertOne'
     const db = await Database.database
     // 检查是否连接成功
     if (!db) db = await this.reconnect()
     // 检查类型插入当个或多个文档
-    let method = 'insertOne'
     if (Array.isArray(docs)) method = insertMany
     return new Promise((res, rej) => {
-      db.collection(colle)[method](docs, (err, result) => {
+      db.collection(this.coll)[method](docs, (err, result) => {
         if (err) rej(err)
+        res(result.result)
+      })
+    })
+  }
+
+  // 更新
+  async update (query, edit, many = false, options = { upset: false }) {
+    let method = 'updateOne'
+    const db = await Database.database
+    // 检查是否连接成功
+    if (!db) db = await this.reconnect()
+    if (many) method = 'updateMany'
+
+    return new Promise((res, rej) => {
+      db.collection(this.coll)[method](query, edit, options, (err, result) => {
+        if(err) return rej(err)
+        res({
+          count: result.result.n,
+          modified: result.result.nModified,
+          isOk: result.result.ok === 1 ? true : false
+        })
+      })
+    })
+  }
+
+  // 删除
+  async delete(query, many) {
+    let method = 'deleteOne'
+    const db = await Database.database
+    // 检查是否连接成功
+    if (!db) db = await this.reconnect()
+    if (many) method = 'deleteMany'
+    return new Promise((res, rej) => {
+      db.collection(this.coll)[method](query,(err, result) => {
+        if(err) return rej(err)
         res(result)
       })
     })
@@ -72,17 +116,3 @@ class Database {
 }
 
 module.exports = Database
-console.log(config.url)
-const db1 = new Database
-
-db1.find('module', {}).then(re => {
-  console.log(re)
-})
-
-
-db1.insert('module', {
-  name: 'router',
-  module: 'koa-router'
-}).then(re => {
-  console.log(re.raw.toString())
-})

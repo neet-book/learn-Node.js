@@ -11,26 +11,8 @@ const session = require('koa-session')
 // 路由
 const router = require('./router/index')
 
-// 自定义模块
-
-
 // 创建实例
 const app = new Koa()
-
-// 数据库
-app.use(async (ctx, next) => {
-  try {
-  Mongo.connect({
-      user: 'root',
-      pwd: '12345',
-      host: 'localhost',
-      prot: 27017
-    })
-  } catch (e) {
-    console.log(e)
-  }
-  next()
-})
 
 // 注册views
 app.use(views(path.resolve(__dirname, 'views'), { extension: 'ejs' }))
@@ -40,7 +22,6 @@ app.use(serve(path.resolve(__dirname, 'static')))
 
 // 注册bodypaser
 app.use(bodyPaser())
-
 // 注册session
 app.keys = ['some secret hurr']
 const config = {
